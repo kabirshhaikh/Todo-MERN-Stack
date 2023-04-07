@@ -202,9 +202,8 @@ const deleteTask = async (req, res, next) => {
             console.log(err);
         }
     }
-
-
 }
+
 
 module.exports = {
     createTask,

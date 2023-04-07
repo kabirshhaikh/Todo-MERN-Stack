@@ -4,8 +4,13 @@ const app = express();
 const router = require('./Routes/routes');
 const sequelize = require('./Util/todoDatabase');
 const Task = require('./Model/Task');
+const User = require('./Model/User');
+const cors = require('cors');
 
 app.use(bodyParser.json());
+
+app.use(cors());
+
 app.use(router);
 
 sequelize.sync({ force: false }).then((req) => {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 function App() {
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
 
   const fetchData = () => {
     fetch('http://localhost:8000/get-all-task')
@@ -17,22 +17,23 @@ function App() {
       })
       .catch(err => console.log(err));
   };
-  
+
 
   useEffect(() => {
     fetchData();
-  },[]);
+  }, []);
 
   return (
     <div className="App">
-      {data && data.map((item) => {
+      {data.result.length > 0 && data.result.map((task) => {
         return (
           <div>
-            <h1>{item.taskName}</h1>
-            <h2>{item.taskDescription}</h2>
-            <h3>{item.taskPriority}</h3>
+            <h1>{task.taskId}</h1>
+            <h1>{task.taskName}</h1>
+            <h1>{task.taskDescription}</h1>
+            <h1>{task.taskPriority}</h1>
           </div>
-        )
+        );
       })}
     </div>
   );
