@@ -162,10 +162,55 @@ const updatePut = async (req, res, next) => {
     }
 }
 
+const deleteTask = async (req, res, next) => {
+    const { taskId } = req.params;
+    console.log("Task Id:" + taskId);
+
+    let deleteTask;
+
+    try {
+        deleteTask = await Task.findOne({
+            where: {
+                taskId: taskId
+            }
+        });
+    }
+    catch (error) {
+        console.log(error);
+    }
+
+    if (!deleteTask) {
+        return res.status(400).json({ message: "Task not  found" });
+    }
+    else {
+        try {
+            let finalDelete;
+            finalDelete = await Task.destroy({
+                where: {
+                    taskId: deleteTask.taskId
+                }
+            });
+
+            if (!finalDelete) {
+                return res.status(400).json({ message: "Unable to delete the task" });
+            }
+            else {
+                return res.status(200).json({ message: "Task Id:" + taskId + " deleted" });
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+
+}
+
 module.exports = {
     createTask,
     getAllTask,
     getSingleTask,
     updatePatch,
-    updatePut
+    updatePut,
+    deleteTask
 }
