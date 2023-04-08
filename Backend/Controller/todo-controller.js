@@ -36,9 +36,7 @@ const createTask = async (req, res, next) => {
 const getAllTask = async (req, res, next) => {
     let getTask
     try {
-        getTask = await Task.findAll().then((result) => {
-            return res.status(201).json({ message: "Found all the Task in Database", result: result });
-        }).catch(err => console.log(err));
+        getTask = await Task.findAll();
     }
     catch (error) {
         console.log(error);
@@ -46,6 +44,9 @@ const getAllTask = async (req, res, next) => {
 
     if (!getTask) {
         return res.status(401).json({ message: "Unable to collect task from database" });
+    }
+    else {
+        return res.status(200).json({ message: "Found all the task", result: getTask });
     }
 
 }
