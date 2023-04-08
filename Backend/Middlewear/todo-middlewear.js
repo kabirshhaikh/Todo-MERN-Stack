@@ -2,14 +2,37 @@ const bcrypt = require('bcrypt');
 const Task = require('../Model/Task');
 const User = require('../Model/User');
 
-const userAuthenticaton = async (req, res, next) => {
+const taskAuthorisation = async (req, res, next) => {
+    //User auth:
     const authHeader = req.headers.authorization;
     if (authHeader) {
         const auth = new Buffer.from(authHeader.split(' ')[1], 'base64').toString().split(':');
         const userEmailFromAuthHeader = auth[0];
         const userPasswordFromAuthHeader = auth[1];
         const { userId } = req.params;
+        const { taskId } = req.params;
         console.log("User id from params for auth: " + userId);
+
+        //Task Extraction:
+        let task;
+
+        try {
+            task = await Task.findOne({
+                where: {
+                    taskId: taskId
+                }
+            });
+        }
+        catch (error) {
+            console.log(error);
+        }
+
+        if (!task) {
+            return res.status(400).json({ message: "Invalid Task" });
+        }
+
+        console.log("Task found in the task-proctection, details are: " + task.taskName + task.taskDescription);
+
 
 
         let user;
@@ -39,7 +62,7 @@ const userAuthenticaton = async (req, res, next) => {
                     return res.status(400).json({ message: "Password does not match" });
                 }
                 else {
-                    if (userEmailFromAuthHeader == user.userEmail && encodedPassword == true) {
+                    if (userEmailFromAuthHeader == user.userEmail && encodedPassword == true && taskId == task.taskId && userId == task.ownerId) {
                         next();
                     }
                     else {
@@ -52,7 +75,9 @@ const userAuthenticaton = async (req, res, next) => {
             }
         }
     }
+
+
+
 }
 
-module.exports = userAuthenticaton;
-
+module.exports = taskAuthorisation;
