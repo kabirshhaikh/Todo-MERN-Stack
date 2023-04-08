@@ -19,6 +19,10 @@ const Task = sequelize.define('task', {
     taskPriority: {
         type: Sequelize.STRING,
         allowNull: false
+    },
+    ownerId: {
+        type: Sequelize.INTEGER,
+        allowNull: false
     }
 });
 
