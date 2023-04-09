@@ -94,9 +94,39 @@ const getSingleUser = async (req, res, next) => {
     }
 }
 
+const login = async (req, res, next) => {
+    const { userEmail, userPassword } = req.body;
+    console.log("Email: " + userEmail + ", password: " + userPassword);
+
+    let loginUser;
+
+    try {
+        loginUser = await User.findOne({
+            where: {
+                userEmail: userEmail
+            }
+        });
+    }
+    catch (error) {
+        console.log(error);
+    }
+
+    if (!loginUser) {
+        return res.status(400).json({ message: "User not authorised" });
+    }
+    else {
+        const databasePassword = loginUser.userPassword;
+        const encodedPassword = await bcrypt.compare(userPassword, databasePassword);
+        if (userEmail == loginUser.userEmail && encodedPassword == true) {
+            return res.status(200).json({ message: `${loginUser.userFirstName} is authorised to login` });
+        }
+    }
+}
+
 module.exports = {
     createUser,
     getAllUser,
-    getSingleUser
+    getSingleUser,
+    login
 }
 

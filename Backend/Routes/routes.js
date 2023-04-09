@@ -9,6 +9,7 @@ const taskAuthentication = require('../Middlewear/todo-middlewear');
 router.post('/create-user', userController.createUser);
 router.get('/get-all-users', userController.getAllUser);
 router.get('/get-single-user/:userId', userController.getSingleUser);
+router.post('/login', userController.login);
 
 //Task Routes:
 router.post('/create-task/:userId', userAuthenticaton, todoController.createTask);
