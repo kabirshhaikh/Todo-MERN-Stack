@@ -1,0 +1,18 @@
+body {
+margin: 0;
+padding: 0;
+}
+
+
+.loginHeading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loginContainer {
+    margin-top: 10%;
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
+}

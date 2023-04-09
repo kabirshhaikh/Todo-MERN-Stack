@@ -118,7 +118,7 @@ const login = async (req, res, next) => {
         const databasePassword = loginUser.userPassword;
         const encodedPassword = await bcrypt.compare(userPassword, databasePassword);
         if (userEmail == loginUser.userEmail && encodedPassword == true) {
-            return res.status(200).json({ message: `${loginUser.userFirstName} is authorised to login` });
+            return res.status(200).json({ message: `${loginUser.userFirstName} is authorised to login`, user: loginUser });
         }
     }
 }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import './Register.css';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Register = () => {
     const [userFirstName, setUserFirstName] = useState('');
@@ -89,6 +89,9 @@ const Register = () => {
                     <input type="checkbox" className="form-check-input" id="exampleCheck1" />
                     <label className="form-check-label" htmlFor="exampleCheck1">Check me out</label>
                 </div> */}
+                <div className="loginLink" style={{ marginTop: '1rem' }}>
+                    <Link to='/login'>Already a user? Login</Link>
+                </div>
                 <button style={{ marginTop: '1rem' }} type="submit" className="btn btn-primary">Submit</button>
             </form>
         </div>
