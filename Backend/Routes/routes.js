@@ -12,7 +12,7 @@ router.get('/get-single-user/:userId', userController.getSingleUser);
 router.post('/login', userController.login);
 
 //Task Routes:
-router.post('/create-task/:userId', userAuthenticaton, todoController.createTask);
+router.post('/create-task/:userId', todoController.createTask);
 router.get('/get-all-task', todoController.getAllTask);
 router.get('/get-single-task/:userId/:taskId', taskAuthentication, todoController.getSingleTask);
 router.patch('/update-task/:userId/:taskId', taskAuthentication, todoController.updatePatch);

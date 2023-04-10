@@ -1,0 +1,32 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.todoContainer {
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+
+
+.todoListWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+.buttonWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.wrapper {
+    background-color: blanchedalmond;
+}
