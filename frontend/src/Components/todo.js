@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from 'react-router-dom';
+import './todo.css';
+import { AiTwotoneDelete } from 'react-icons/ai';
+import { MdSystemUpdateAlt } from 'react-icons/md';
+
 
 const Todo = () => {
     //Use States:
@@ -35,40 +39,42 @@ const Todo = () => {
             });
     }
 
-    const handleSubmitTask = async (event) => {
+    const userId = User.userId;
+
+    const handleOnSubmit = async (event) => {
         event.preventDefault();
-
         if (taskName === '' || taskDescription === '' || taskPriority === '') {
-            alert("Please fill all the fields to enter a Todo");
+            alert("Please fill all the inputs for task registration");
+        } else {
+            try {
+                const response = await fetch(`http://localhost:8000/create-task/${userId}`, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        taskName, taskDescription, taskPriority
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    alert(`Task registered successfully with id : ${data.result.taskId}`);
+                    fetchTask();
+                    setTaskName('');
+                    setTaskDescription('');
+                    setTaskPriority('');
+                } else {
+                    alert('Unable to register the task');
+                }
+            } catch (error) {
+                console.log(error);
+                alert('Something went wrong, try again later');
+            }
         }
 
-        try {
-            const response = await fetch(`http://localhost:8000/create-task/${User.userId}`, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    taskName, taskDescription, taskPriority
-                })
-            })
 
-           if (!response.ok) {
-            alert("Unable to store a task");
-           }
-
-        }
-        catch (error) {
-            console.log(error);
-        }
-
-        setTaskName('');
-        setTaskDescription('');
-        setTaskPriority('');
     }
-
-
-
 
 
     useEffect(() => {
@@ -77,8 +83,11 @@ const Todo = () => {
 
     return (
         <div className="todoContainer">
+            <div style={{ marginBottom: '1rem' }} className="todoHeadingWrapper">
+                <h1 className="display-4">Add a Todo</h1>
+            </div>
             <div className="todoSubmitWrapper">
-                <form onSubmit={handleSubmitTask}>
+                <form onSubmit={handleOnSubmit}>
                     <div className="form-group">
                         <label htmlFor="taskName">Task Name</label>
                         <input onChange={handleTaskName} value={taskName} type="text" className="form-control" id="taskNameId" placeholder="Enter Task" />
@@ -95,19 +104,44 @@ const Todo = () => {
                 </form>
             </div>
             <div className="renderedTodoWrapper">
+                {task.length > 0 ? (
+                    <div className="taskListHeaing">
+                        <h1 className="display-4">Your Todo's</h1>
+                    </div>
+                ) : (
+                    <div className="taskListHeaing">
+                        <h1 className="display-4">No Todo's! Add one</h1>
+                    </div>
+                )}
+                <div className="todoListHeading">
+                </div>
                 {task && task.length > 0 ? task.map((item) => {
                     return (
-                        <>
-                            <h5>{item.taskName}</h5>
-                            <h5>{item.taskDescription}</h5>
-                            <h5>{item.taskPriority}</h5>
-                        </>
+                        <div className="wrapper">
+                            <div className="todoListWrapper">
+                                <div className="taskNameandPriorityWrapper">
+                                    <figure>
+                                        <blockquote className="blockquote">
+                                            <p>{item.taskName}</p>
+                                        </blockquote>
+                                        <figcaption className="blockquote-footer">
+                                            Priority: <cite title="Source Title">{item.taskPriority}</cite>
+                                        </figcaption>
+                                    </figure>
+                                </div>
+                                <div className="buttonWrapper">
+                                    <div className="deleteButtonsWrapper">
+                                        <AiTwotoneDelete size={30} />
+                                    </div>
+                                    <div className="updateButtonsWrapper">
+                                        <MdSystemUpdateAlt size={30} />
+                                    </div>
+                                </div>
+                            </div>
+                            <p>{item.taskDescription}</p>
+                        </div>
                     );
-                }) : (
-                    <>
-                        No todo to display, please add 1
-                    </>
-                )}
+                }) : null}
             </div>
         </div>
     );

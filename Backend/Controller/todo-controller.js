@@ -7,8 +7,7 @@ const testFunction = (req, res, next) => {
 
 const createTask = async (req, res, next) => {
     const { taskName, taskDescription, taskPriority } = req.body;
-    const userIdFromAuth = req.userIdFromAuth;
-    console.log("Id coming from user authentication into task controller:" + userIdFromAuth);
+    const { userId } = req.params;
     console.log("From the body:" + taskName, taskDescription, taskPriority);
     if (!taskName || !taskDescription || !taskPriority) {
         res.status(400).send("Please fill all the fields");
@@ -17,7 +16,7 @@ const createTask = async (req, res, next) => {
     let post;
     try {
         post = await Task.create({
-            taskName, taskDescription, taskPriority, ownerId: userIdFromAuth
+            taskName, taskDescription, taskPriority, ownerId: userId
         })
     }
     catch (error) {
