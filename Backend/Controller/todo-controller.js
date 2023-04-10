@@ -1,6 +1,5 @@
 const express = require('express');
 const Task = require('../Model/Task');
-const { post, get, search, put } = require('../Routes/routes');
 
 const testFunction = (req, res, next) => {
     res.status(201).send("Hello world from Todo Controller");
@@ -209,6 +208,31 @@ const deleteTask = async (req, res, next) => {
     }
 }
 
+const getAllTaskOfAUser = async (req, res, next) => {
+    const { userId } = req.params;
+
+    let allTask;
+
+    try {
+        allTask = await Task.findAll({
+            where: {
+                ownerId: userId
+            }
+        });
+    }
+    catch (error) {
+        console.log(error);
+    }
+
+    if (!allTask) {
+        return res.status(400).json({ message: "No Task Found" });
+    }
+    else {
+        return res.status(200).json({ message: `All task found for user ${allTask.userFirstName}`, task: allTask });
+    }
+
+}
+
 
 module.exports = {
     createTask,
@@ -216,5 +240,6 @@ module.exports = {
     getSingleTask,
     updatePatch,
     updatePut,
-    deleteTask
+    deleteTask,
+    getAllTaskOfAUser
 }

@@ -18,5 +18,6 @@ router.get('/get-single-task/:userId/:taskId', taskAuthentication, todoControlle
 router.patch('/update-task/:userId/:taskId', taskAuthentication, todoController.updatePatch);
 router.put('/update-task/:userId/:taskId', taskAuthentication, todoController.updatePut);
 router.delete('/delete-task/:userId/:taskId', taskAuthentication, todoController.deleteTask);
+router.get('/get-task-user/:userId', todoController.getAllTaskOfAUser);
 
 module.exports = router;
