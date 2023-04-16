@@ -76,6 +76,31 @@ const Todo = () => {
 
     }
 
+    const handleDeleteTask = async (taskId) => {
+        console.log("Delete task id:" + taskId + " and delete user Id is:" + User.userId);
+        try {
+            const response = await fetch(`http://localhost:8000/delete-task/${User.userId}/${taskId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+
+            if (!response.ok) {
+                alert("Unable to delete a task");
+            }
+            else {
+                alert("Task deleted sucessfully");
+                fetchTask();
+            }
+
+        }
+        catch (error) {
+            console.log(error);
+        }
+
+    }
+
 
     useEffect(() => {
         fetchTask();
@@ -131,7 +156,7 @@ const Todo = () => {
                                 </div>
                                 <div className="buttonWrapper">
                                     <div className="deleteButtonsWrapper">
-                                        <AiTwotoneDelete size={30} />
+                                        <AiTwotoneDelete onClick={() => handleDeleteTask(item.taskId)} size={30} />
                                     </div>
                                     <div className="updateButtonsWrapper">
                                         <MdSystemUpdateAlt size={30} />
