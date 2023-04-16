@@ -166,8 +166,8 @@ const updatePut = async (req, res, next) => {
 }
 
 const deleteTask = async (req, res, next) => {
-    const { taskId } = req.params;
-    console.log("Task Id:" + taskId);
+    const { taskId, userId } = req.params;
+    console.log("Task Id:" + taskId + " and userId for delete:" +userId);
 
     let deleteTask;
 
@@ -190,7 +190,8 @@ const deleteTask = async (req, res, next) => {
             let finalDelete;
             finalDelete = await Task.destroy({
                 where: {
-                    taskId: deleteTask.taskId
+                    taskId: deleteTask.taskId,
+                    ownerId: userId
                 }
             });
 
