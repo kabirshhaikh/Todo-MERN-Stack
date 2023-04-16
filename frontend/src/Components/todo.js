@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from 'react-router-dom';
+import { json, useLocation } from 'react-router-dom';
 import './todo.css';
 import { AiTwotoneDelete } from 'react-icons/ai';
 import { MdSystemUpdateAlt } from 'react-icons/md';
@@ -11,6 +11,7 @@ const Todo = () => {
     const [taskName, setTaskName] = useState('');
     const [taskDescription, setTaskDescription] = useState('');
     const [taskPriority, setTaskPriority] = useState('');
+    const [updateButton, setUpdateButton] = useState(false);
     const location = useLocation();
     const User = location.state.userInformation;
 
@@ -101,6 +102,51 @@ const Todo = () => {
 
     }
 
+    const handleUpdatePut = async (taskId) => {
+        const userId = User.userId;
+        console.log("User id: " + userId + " and task Id :" + taskId + " for the update functionailty");
+        const taskToUpdate = task.find(t => t.taskId === taskId);
+        if (!taskToUpdate) {
+            console.log("Task not found with the provided task Id:", taskId);
+            return;
+        }
+        setTaskName(taskToUpdate.taskName);
+        setTaskDescription(taskToUpdate.taskDescription);
+        setTaskPriority(taskToUpdate.taskPriority);
+        console.log("Task Name:" + taskName + ", task description: " + taskDescription + " and task priority is: " + taskPriority);
+        try {
+            setUpdateButton(true);
+            const response = await fetch(`http://localhost:8000/update-task/${userId}/${taskId}`, {
+                method: "PUT",
+                headers: {
+                    'Content-Type': "application/json"
+                },
+                body: JSON.stringify({
+                    taskName: taskName,
+                    taskDescription: taskDescription,
+                    taskPriority: taskPriority
+                })
+            })
+
+            if (!response.ok) {
+                alert(`Unable to update the task with taskId: ${taskId}`);
+            }
+            else {
+                alert("Updated the task sucessfully");
+                fetchTask();
+                setTaskName('');
+                setTaskDescription('');
+                setTaskPriority('');
+            }
+        }
+        catch (error) {
+            console.log(error);
+        }
+        finally {
+            setUpdateButton(false);
+        }
+    }
+
 
     useEffect(() => {
         fetchTask();
@@ -125,7 +171,12 @@ const Todo = () => {
                         <label htmlFor="taskPriority">Task Priority</label>
                         <input onChange={handleTaskPriority} value={taskPriority} type="text" className="form-control" id="taskPriority Id" placeholder="Enter Task Priority" />
                     </div>
-                    <button style={{ marginTop: '1rem' }} type="submit" className="btn btn-primary">Submit</button>
+                    {updateButton === true ? (
+                        <button style={{ marginTop: '1rem' }} type="submit" className="btn btn-primary">Update</button>
+                    ) : (
+                        <button style={{ marginTop: '1rem' }} type="submit" className="btn btn-primary">Submit</button>
+                    )}
+
                 </form>
             </div>
             <div className="renderedTodoWrapper">
@@ -142,7 +193,7 @@ const Todo = () => {
                 </div>
                 {task && task.length > 0 ? task.map((item) => {
                     return (
-                        <div className="wrapper">
+                        <div key={item.taskId} className="wrapper">
                             <div className="todoListWrapper">
                                 <div className="taskNameandPriorityWrapper">
                                     <figure>
@@ -159,7 +210,7 @@ const Todo = () => {
                                         <AiTwotoneDelete onClick={() => handleDeleteTask(item.taskId)} size={30} />
                                     </div>
                                     <div className="updateButtonsWrapper">
-                                        <MdSystemUpdateAlt size={30} />
+                                        <MdSystemUpdateAlt onClick={() => handleUpdatePut(item.taskId)} size={30} />
                                     </div>
                                 </div>
                             </div>
