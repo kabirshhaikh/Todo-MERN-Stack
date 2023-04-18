@@ -13,7 +13,8 @@ const Todo = () => {
     const [taskPriority, setTaskPriority] = useState('');
     const [updateButton, setUpdateButton] = useState(false);
     const location = useLocation();
-    const User = location.state.userInformation;
+    const User = location?.state?.userInformation;
+
 
     //Functions to handle task name, desc and priority:
 
@@ -30,7 +31,7 @@ const Todo = () => {
     }
 
     const fetchTask = () => {
-        fetch(`http://localhost:8000/get-task-user/${User.userId}`)
+        fetch(`http://localhost:8000/get-task-user/${User?.userId}`)
             .then((response) => {
                 return response.json();
             })
@@ -40,9 +41,9 @@ const Todo = () => {
             });
     }
 
-    const userId = User.userId;
 
     const handleOnSubmit = async (event) => {
+        const userId = User.userId;
         event.preventDefault();
         if (taskName === '' || taskDescription === '' || taskPriority === '') {
             alert("Please fill all the inputs for task registration");
@@ -73,8 +74,6 @@ const Todo = () => {
                 alert('Something went wrong, try again later');
             }
         }
-
-
     }
 
     const handleDeleteTask = async (taskId) => {
@@ -102,49 +101,46 @@ const Todo = () => {
 
     }
 
-    const handleUpdatePut = async (taskId) => {
-        const userId = User.userId;
-        console.log("User id: " + userId + " and task Id :" + taskId + " for the update functionailty");
-        const taskToUpdate = task.find(t => t.taskId === taskId);
-        if (!taskToUpdate) {
-            console.log("Task not found with the provided task Id:", taskId);
+    const handleUpdateSubmit = async (taskId, ownerId) => {
+        setUpdateButton(true);
+        const TASK = task.find(t => t.taskId === taskId);
+        if (!TASK) {
+            console.log("Task not found with provided taskId:" + taskId);
             return;
         }
-        setTaskName(taskToUpdate.taskName);
-        setTaskDescription(taskToUpdate.taskDescription);
-        setTaskPriority(taskToUpdate.taskPriority);
-        console.log("Task Name:" + taskName + ", task description: " + taskDescription + " and task priority is: " + taskPriority);
+        setTaskName(TASK.taskName);
+        setTaskDescription(TASK.taskDescription);
+        setTaskPriority(TASK.taskPriority);
+        console.log("Task Name:" + taskName + ", task description:" + taskDescription + " and task priority is:" + taskPriority);
+
         try {
-            setUpdateButton(true);
-            const response = await fetch(`http://localhost:8000/update-task/${userId}/${taskId}`, {
-                method: "PUT",
+            const updateResponse = await fetch(`http://localhost:8000/update-task/${ownerId}/${taskId}`, {
+                method: 'PUT',
                 headers: {
-                    'Content-Type': "application/json"
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    taskName: taskName,
-                    taskDescription: taskDescription,
-                    taskPriority: taskPriority
+                    taskName, taskDescription, taskPriority
                 })
-            })
+            });
 
-            if (!response.ok) {
-                alert(`Unable to update the task with taskId: ${taskId}`);
+            if (!updateResponse.ok) {
+                alert("Unable to update the task");
             }
             else {
-                alert("Updated the task sucessfully");
-                fetchTask();
+                alert("Task Updated Sucessfully");
                 setTaskName('');
                 setTaskDescription('');
                 setTaskPriority('');
+                setUpdateButton(false);
+                fetchTask();
             }
+
         }
         catch (error) {
             console.log(error);
         }
-        finally {
-            setUpdateButton(false);
-        }
+
     }
 
 
@@ -158,7 +154,7 @@ const Todo = () => {
                 <h1 className="display-4">Add a Todo</h1>
             </div>
             <div className="todoSubmitWrapper">
-                <form onSubmit={handleOnSubmit}>
+                <form onSubmit={updateButton ? handleUpdateSubmit : handleOnSubmit}>
                     <div className="form-group">
                         <label htmlFor="taskName">Task Name</label>
                         <input onChange={handleTaskName} value={taskName} type="text" className="form-control" id="taskNameId" placeholder="Enter Task" />
@@ -210,7 +206,7 @@ const Todo = () => {
                                         <AiTwotoneDelete onClick={() => handleDeleteTask(item.taskId)} size={30} />
                                     </div>
                                     <div className="updateButtonsWrapper">
-                                        <MdSystemUpdateAlt onClick={() => handleUpdatePut(item.taskId)} size={30} />
+                                        <MdSystemUpdateAlt onClick={() => handleUpdateSubmit(item.taskId, item.ownerId)} size={30} />
                                     </div>
                                 </div>
                             </div>
