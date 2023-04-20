@@ -1,5 +1,6 @@
 const express = require('express');
 const Task = require('../Model/Task');
+const { put } = require('../Routes/routes');
 
 const testFunction = (req, res, next) => {
     res.status(201).send("Hello world from Todo Controller");
@@ -119,10 +120,10 @@ const updatePatch = async (req, res, next) => {
 
 
 const updatePut = async (req, res, next) => {
-    const { taskId } = req.params;
+    const { taskId, userId } = req.params;
+    console.log(taskId, userId + "from server test");
     const { taskName, taskDescription, taskPriority } = req.body;
-    console.log("Task Id:" + taskId + "task name:" + taskName + "task desc:" + taskDescription + "task priority: " + taskPriority);
-
+    console.log("Task Id:" + taskId + "user Id: " + userId + "task name:" + taskName + "task desc:" + taskDescription + "task priority: " + taskPriority);
     let foundTask;
 
     try {
@@ -148,7 +149,8 @@ const updatePut = async (req, res, next) => {
                 taskPriority: taskPriority
             }, {
                 where: {
-                    taskId: taskId
+                    taskId: taskId,
+                    ownerId: userId
                 }
             });
         }
@@ -157,6 +159,7 @@ const updatePut = async (req, res, next) => {
         }
 
         if (!putUpdate) {
+            console.log(putUpdate);
             return res.status(400).json({ message: "Unable to update the task" });
         }
         else {
@@ -167,7 +170,7 @@ const updatePut = async (req, res, next) => {
 
 const deleteTask = async (req, res, next) => {
     const { taskId, userId } = req.params;
-    console.log("Task Id:" + taskId + " and userId for delete:" +userId);
+    console.log("Task Id:" + taskId + " and userId for delete:" + userId);
 
     let deleteTask;
 

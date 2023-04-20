@@ -16,7 +16,7 @@ router.post('/create-task/:userId', todoController.createTask);
 router.get('/get-all-task', todoController.getAllTask);
 router.get('/get-single-task/:userId/:taskId', taskAuthentication, todoController.getSingleTask);
 router.patch('/update-task/:userId/:taskId', taskAuthentication, todoController.updatePatch);
-router.put('/update-task/:userId/:taskId', taskAuthentication, todoController.updatePut);
+router.put('/update-task/:userId/:taskId', todoController.updatePut);
 router.delete('/delete-task/:userId/:taskId', todoController.deleteTask);
 router.get('/get-task-user/:userId', todoController.getAllTaskOfAUser);
 
