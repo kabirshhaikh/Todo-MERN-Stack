@@ -3,6 +3,7 @@ import { json, useLocation } from 'react-router-dom';
 import './todo.css';
 import { AiTwotoneDelete } from 'react-icons/ai';
 import { MdSystemUpdateAlt } from 'react-icons/md';
+import { useNavigate } from 'react-router-dom'
 
 
 const Todo = () => {
@@ -12,8 +13,11 @@ const Todo = () => {
     const [taskDescription, setTaskDescription] = useState('');
     const [taskPriority, setTaskPriority] = useState('');
     const [updateButton, setUpdateButton] = useState(false);
+    const [updateTaskId, setUpdatetaskId] = useState('');
+    const [updateOwnerId, setUpdateOwnerId] = useState('');
     const location = useLocation();
     const User = location?.state?.userInformation;
+    const navigate = useNavigate();
 
 
     //Functions to handle task name, desc and priority:
@@ -30,8 +34,8 @@ const Todo = () => {
         setTaskPriority(event.target.value);
     }
 
-    const fetchTask = () => {
-        fetch(`http://localhost:8000/get-task-user/${User?.userId}`)
+    const fetchTask = async () => {
+        await fetch(`http://localhost:8000/get-task-user/${User?.userId}`)
             .then((response) => {
                 return response.json();
             })
@@ -43,8 +47,8 @@ const Todo = () => {
 
 
     const handleOnSubmit = async (event) => {
-        const userId = User.userId;
         event.preventDefault();
+        const userId = User.userId;
         if (taskName === '' || taskDescription === '' || taskPriority === '') {
             alert("Please fill all the inputs for task registration");
         } else {
@@ -101,38 +105,48 @@ const Todo = () => {
 
     }
 
-    const handleUpdateSubmit = async (taskId, ownerId) => {
-        setUpdateButton(true);
-        const TASK = task.find(t => t.taskId === taskId);
-        if (!TASK) {
-            console.log("Task not found with provided taskId:" + taskId);
-            return;
-        }
-        setTaskName(TASK.taskName);
-        setTaskDescription(TASK.taskDescription);
-        setTaskPriority(TASK.taskPriority);
-        console.log("Task Name:" + taskName + ", task description:" + taskDescription + " and task priority is:" + taskPriority);
+    const handleUpdateSubmit = async (event) => {
+        event.preventDefault();
+        // const body = {
+        //     taskName,
+        //     taskDescription,
+        //     taskPriority
+
+        // }
+
+        // console.log(body);
 
         try {
-            const updateResponse = await fetch(`http://localhost:8000/update-task/${ownerId}/${taskId}`, {
+            setUpdateButton(true);
+            const updateResponse = await fetch(`http://localhost:8000/update-task/${updateOwnerId}/${updateTaskId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    taskName, taskDescription, taskPriority
+                    taskName: taskName,
+                    taskDescription: taskDescription,
+                    taskPriority: taskPriority
                 })
             });
 
             if (!updateResponse.ok) {
                 alert("Unable to update the task");
+                console.log(updateResponse);
             }
             else {
                 alert("Task Updated Sucessfully");
                 setTaskName('');
                 setTaskDescription('');
                 setTaskPriority('');
+                setTask({
+                    ...task,
+                    taskName,
+                    taskDescription,
+                    taskPriority
+                })
                 setUpdateButton(false);
+                // navigate(`/create-task/${updateOwnerId}`);
                 fetchTask();
             }
 
@@ -140,6 +154,25 @@ const Todo = () => {
         catch (error) {
             console.log(error);
         }
+
+    }
+
+    const testUpdate = (taskId, ownerId) => {
+        setUpdateButton(true);
+        console.log(taskId, ownerId);
+        const TASK = task.find(t => t.taskId === taskId);
+        if (!TASK) {
+            console.log("Unable to find task");
+        }
+        else {
+            console.log(TASK);
+        }
+        setTaskName(TASK.taskName);
+        setTaskDescription(TASK.taskDescription);
+        setTaskPriority(TASK.taskPriority);
+        setUpdatetaskId(taskId);
+        setUpdateOwnerId(ownerId);
+
 
     }
 
@@ -168,9 +201,9 @@ const Todo = () => {
                         <input onChange={handleTaskPriority} value={taskPriority} type="text" className="form-control" id="taskPriority Id" placeholder="Enter Task Priority" />
                     </div>
                     {updateButton === true ? (
-                        <button style={{ marginTop: '1rem' }} type="submit" className="btn btn-primary">Update</button>
+                        <button style={{ marginTop: '1rem' }} type={updateButton ? 'submit' : 'button'} className="btn btn-primary">Update</button>
                     ) : (
-                        <button style={{ marginTop: '1rem' }} type="submit" className="btn btn-primary">Submit</button>
+                        <button style={{ marginTop: '1rem' }} type={updateButton ? 'button' : 'submit'} className="btn btn-primary">Submit</button>
                     )}
 
                 </form>
@@ -206,7 +239,7 @@ const Todo = () => {
                                         <AiTwotoneDelete onClick={() => handleDeleteTask(item.taskId)} size={30} />
                                     </div>
                                     <div className="updateButtonsWrapper">
-                                        <MdSystemUpdateAlt onClick={() => handleUpdateSubmit(item.taskId, item.ownerId)} size={30} />
+                                        <MdSystemUpdateAlt onClick={() => testUpdate(item.taskId, item.ownerId)} size={30} />
                                     </div>
                                 </div>
                             </div>
