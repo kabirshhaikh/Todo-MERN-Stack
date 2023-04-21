@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { json, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import './todo.css';
 import { AiTwotoneDelete } from 'react-icons/ai';
+import { ImPencil } from "react-icons/im";
 import { MdSystemUpdateAlt } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom'
 
@@ -65,7 +66,7 @@ const Todo = () => {
 
                 if (response.ok) {
                     const data = await response.json();
-                    alert(`Task registered successfully with id : ${data.result.taskId}`);
+                    alert(`Task created sucessfully`);
                     fetchTask();
                     setTaskName('');
                     setTaskDescription('');
@@ -107,15 +108,6 @@ const Todo = () => {
 
     const handleUpdateSubmit = async (event) => {
         event.preventDefault();
-        // const body = {
-        //     taskName,
-        //     taskDescription,
-        //     taskPriority
-
-        // }
-
-        // console.log(body);
-
         try {
             setUpdateButton(true);
             const updateResponse = await fetch(`http://localhost:8000/update-task/${updateOwnerId}/${updateTaskId}`, {
@@ -146,7 +138,6 @@ const Todo = () => {
                     taskPriority
                 })
                 setUpdateButton(false);
-                // navigate(`/create-task/${updateOwnerId}`);
                 fetchTask();
             }
 
@@ -157,7 +148,7 @@ const Todo = () => {
 
     }
 
-    const testUpdate = (taskId, ownerId) => {
+    const updatePut = (taskId, ownerId) => {
         setUpdateButton(true);
         console.log(taskId, ownerId);
         const TASK = task.find(t => t.taskId === taskId);
@@ -176,6 +167,11 @@ const Todo = () => {
 
     }
 
+    const handleLogout = () => {
+        navigate('/login');
+        alert("Sucessfully Logged Out");
+    }
+
 
     useEffect(() => {
         fetchTask();
@@ -184,7 +180,12 @@ const Todo = () => {
     return (
         <div className="todoContainer">
             <div style={{ marginBottom: '1rem' }} className="todoHeadingWrapper">
-                <h1 className="display-4">Add a Todo</h1>
+                <div>
+                    <h1 className="display-4">Add a Todo</h1>
+                </div>
+                <div className="logoutButton">
+                    <button onClick={handleLogout} type="button" className="btn btn-info">Logout</button>
+                </div>
             </div>
             <div className="todoSubmitWrapper">
                 <form onSubmit={updateButton ? handleUpdateSubmit : handleOnSubmit}>
@@ -239,7 +240,7 @@ const Todo = () => {
                                         <AiTwotoneDelete onClick={() => handleDeleteTask(item.taskId)} size={30} />
                                     </div>
                                     <div className="updateButtonsWrapper">
-                                        <MdSystemUpdateAlt onClick={() => testUpdate(item.taskId, item.ownerId)} size={30} />
+                                        <ImPencil onClick={() => updatePut(item.taskId, item.ownerId)} size={25} />
                                     </div>
                                 </div>
                             </div>
