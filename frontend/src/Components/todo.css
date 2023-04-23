@@ -12,7 +12,7 @@ body {
 .todoHeadingWrapper {
     display: flex;
     flex-direction: row;
-    justify-content:space-between;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -23,6 +23,7 @@ body {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+   
 }
 
 
@@ -32,8 +33,18 @@ body {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    margin-left: 2rem;
 }
 
 .wrapper {
+    max-width: 100%;
     background-color: blanchedalmond;
+}
+
+.updateButtonsWrapper {
+    margin-left: 1rem;
+}
+
+.taskNameandPriorityWrapper blockquote {
+    word-break: break-word;
 }

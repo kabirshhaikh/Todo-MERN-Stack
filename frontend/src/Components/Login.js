@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Login.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Login = () => {
 
@@ -72,6 +72,10 @@ const Login = () => {
                 <div style={{ marginTop: '1rem' }} className="form-group">
                     <label htmlFor="password">Password</label>
                     <input onChange={handleUserPassword} value={userPassword} type="password" className="form-control" id="passwordId" placeholder="Password" />
+                </div>
+
+                <div className="registerLink" style={{ marginTop: '1rem' }}>
+                    <Link to='/register'>Not a registered User? Click here to register</Link>
                 </div>
 
                 <button style={{ marginTop: '1rem' }} type="submit" className="btn btn-primary">Submit</button>

@@ -168,7 +168,7 @@ const Todo = () => {
     }
 
     const handleLogout = () => {
-        navigate('/login');
+        navigate('/');
         alert("Sucessfully Logged Out");
     }
 
@@ -221,7 +221,7 @@ const Todo = () => {
                 )}
                 <div className="todoListHeading">
                 </div>
-                {task && task.length > 0 ? task.map((item) => {
+                {task && task.length > 0 ? task.slice().reverse().map((item) => {
                     return (
                         <div key={item.taskId} className="wrapper">
                             <div className="todoListWrapper">
