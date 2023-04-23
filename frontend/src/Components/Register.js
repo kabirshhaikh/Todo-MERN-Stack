@@ -90,7 +90,7 @@ const Register = () => {
                     <label className="form-check-label" htmlFor="exampleCheck1">Check me out</label>
                 </div> */}
                 <div className="loginLink" style={{ marginTop: '1rem' }}>
-                    <Link to='/login'>Already a user? Login</Link>
+                    <Link to='/'>Already a user? Login</Link>
                 </div>
                 <button style={{ marginTop: '1rem' }} type="submit" className="btn btn-primary">Submit</button>
             </form>
