@@ -3,7 +3,6 @@ import { useLocation } from 'react-router-dom';
 import './todo.css';
 import { AiTwotoneDelete } from 'react-icons/ai';
 import { ImPencil } from "react-icons/im";
-import { MdSystemUpdateAlt } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom'
 
 
@@ -16,6 +15,10 @@ const Todo = () => {
     const [updateButton, setUpdateButton] = useState(false);
     const [updateTaskId, setUpdatetaskId] = useState('');
     const [updateOwnerId, setUpdateOwnerId] = useState('');
+    const [Alert, setAlert] = useState(false);
+    const [deleteAlert, setDeleteAlert] = useState(false);
+    const [updateAlert, setUpdateAlert] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
     const location = useLocation();
     const User = location?.state?.userInformation;
     const navigate = useNavigate();
@@ -66,7 +69,7 @@ const Todo = () => {
 
                 if (response.ok) {
                     const data = await response.json();
-                    alert(`Task created sucessfully`);
+                    handleTaskCreationAlert();
                     fetchTask();
                     setTaskName('');
                     setTaskDescription('');
@@ -80,6 +83,7 @@ const Todo = () => {
             }
         }
     }
+
 
     const handleDeleteTask = async (taskId) => {
         console.log("Delete task id:" + taskId + " and delete user Id is:" + User.userId);
@@ -95,7 +99,7 @@ const Todo = () => {
                 alert("Unable to delete a task");
             }
             else {
-                alert("Task deleted sucessfully");
+                handleDeleteAlert();
                 fetchTask();
             }
 
@@ -127,7 +131,7 @@ const Todo = () => {
                 console.log(updateResponse);
             }
             else {
-                alert("Task Updated Sucessfully");
+                handleUpdateAlert();
                 setTaskName('');
                 setTaskDescription('');
                 setTaskPriority('');
@@ -172,6 +176,42 @@ const Todo = () => {
         alert("Sucessfully Logged Out");
     }
 
+    //Task Creation Alert:
+    const handleTaskCreationAlert = () => {
+        setAlert(true);
+        setAlertMessage('Task Created Sucessfully');
+    }
+
+    const disableTaskCreationAlert = () => {
+        setAlertMessage('');
+        setAlert(false);
+    }
+    //Task Creation Alert:
+
+    //Task Delete Alert:
+    const handleDeleteAlert = () => {
+        setDeleteAlert(true);
+        setAlertMessage('Task Deleted Sucessfully');
+    }
+
+    const disableDeleteAlert = () => {
+        setAlertMessage('');
+        setDeleteAlert(false);
+    }
+    //Task Delete Alert:
+
+    //Task Update Alert:
+    const handleUpdateAlert = () => {
+        setUpdateAlert(true);
+        setAlertMessage('Task Updated Sucessfully');
+    }
+
+    const disableHandleAlert = () => {
+        setAlertMessage('');
+        setUpdateAlert(false);
+    }
+    //Task Update Alert:
+
 
     useEffect(() => {
         fetchTask();
@@ -179,6 +219,21 @@ const Todo = () => {
 
     return (
         <div className="todoContainer">
+            {Alert === true ? (
+                <div onClick={disableTaskCreationAlert} className="alert alert-success" role="alert">
+                    {alertMessage}
+                </div>
+            ) : null}
+            {deleteAlert === true ? (
+                <div onClick={disableDeleteAlert} className="alert alert-danger" role="alert">
+                    {alertMessage}
+                </div>
+            ) : null}
+            {updateAlert === true ? (
+                <div onClick={disableHandleAlert} className="alert alert-info" role="alert">
+                    {alertMessage}
+                </div>
+            ) : null}
             <div style={{ marginBottom: '1rem' }} className="todoHeadingWrapper">
                 <div>
                     <h1 className="display-4">Add a Todo</h1>
