@@ -16,3 +16,13 @@ padding: 0;
     margin-right: auto;
     margin-left: auto;
 }
+
+
+/* Media Query for Mobile: */
+@media (max-width: 390px) {
+    .loginContainer {
+        width: 80%;
+        margin-top: 14rem;
+    }
+}
+/* Media Query for Mobile: */

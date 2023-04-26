@@ -299,7 +299,9 @@ const Todo = () => {
                                     </div>
                                 </div>
                             </div>
-                            <p>{item.taskDescription}</p>
+                            <div className="taskNameandPriorityWrapper">
+                                <p>{item.taskDescription}</p>
+                            </div>
                         </div>
                     );
                 }) : null}
