@@ -23,6 +23,7 @@ body {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    
    
 }
 
@@ -34,17 +35,40 @@ body {
     justify-content: center;
     align-items: center;
     margin-left: 2rem;
+    max-width: 20%;
+    flex-basis: auto;
+}
+
+.deleteButtonsWrapper, .updateButtonsWrapper {
+    flex-shrink: 0;
 }
 
 .wrapper {
-    max-width: 100%;
+    width: 100%;
     background-color: blanchedalmond;
+    overflow-wrap: break-word;
 }
 
 .updateButtonsWrapper {
     margin-left: 1rem;
+
 }
 
-.taskNameandPriorityWrapper blockquote {
-    word-break: break-word;
+.taskNameandPriorityWrapper  {
+    max-width: 80%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    flex-grow: 0;
 }
+
+
+/* Media query for mobile: */
+
+@media (max-width: 390px) {
+    .todoContainer {
+        margin-top: 3rem;
+    }
+} 
+
+/* Media query for mobile: */
+

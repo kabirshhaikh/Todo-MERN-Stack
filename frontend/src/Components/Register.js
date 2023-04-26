@@ -45,7 +45,7 @@ const Register = () => {
             if (response.ok) {
                 const data = await response.json();
                 alert(`${userFirstName} registered sucessfully`);
-                navigate('/login');
+                navigate('/');
             }
             else {
                 alert('Unable to register the User');
