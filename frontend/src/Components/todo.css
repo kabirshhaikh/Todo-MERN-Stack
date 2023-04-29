@@ -23,8 +23,6 @@ body {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    
-   
 }
 
 
@@ -32,33 +30,35 @@ body {
 .buttonWrapper {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    margin-left: 2rem;
+    /* margin-left: 1rem; */
     max-width: 20%;
     flex-basis: auto;
+
 }
 
-.deleteButtonsWrapper, .updateButtonsWrapper {
+.deleteButtonsWrapper,
+.updateButtonsWrapper {
     flex-shrink: 0;
 }
 
 .wrapper {
     width: 100%;
     background-color: blanchedalmond;
-    overflow-wrap: break-word;
+    padding: 1rem;
+    margin-bottom: 1rem;
 }
 
-.updateButtonsWrapper {
+/* .updateButtonsWrapper {
     margin-left: 1rem;
 
-}
+} */
 
-.taskNameandPriorityWrapper  {
+.taskNameandPriorityWrapper {
     max-width: 80%;
     overflow-wrap: break-word;
     word-wrap: break-word;
-    flex-grow: 0;
 }
 
 
@@ -68,7 +68,13 @@ body {
     .todoContainer {
         margin-top: 3rem;
     }
-} 
+
+    .buttonWrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
 
 /* Media query for mobile: */
-
