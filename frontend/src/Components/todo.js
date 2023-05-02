@@ -235,8 +235,8 @@ const Todo = () => {
                 </div>
             ) : null}
             <div style={{ marginBottom: '1rem' }} className="todoHeadingWrapper">
-                <div>
-                    <h1 className="display-4">Add a Todo</h1>
+                <div className="userWelcome">
+                    <h1 className="display-4">Welcome {User.userFirstName}, add a Todo</h1>
                 </div>
                 <div className="logoutButton">
                     <button onClick={handleLogout} type="button" className="btn btn-info">Logout</button>
