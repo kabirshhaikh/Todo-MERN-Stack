@@ -39,7 +39,7 @@ const Todo = () => {
     }
 
     const fetchTask = async () => {
-        await fetch(`http://localhost:8000/get-task-user/${User?.userId}`)
+        await fetch(`https://backend-todo-mern.onrender.com/get-task-user/${User?.userId}`)
             .then((response) => {
                 return response.json();
             })
@@ -57,7 +57,7 @@ const Todo = () => {
             alert("Please fill all the inputs for task registration");
         } else {
             try {
-                const response = await fetch(`http://localhost:8000/create-task/${userId}`, {
+                const response = await fetch(`https://backend-todo-mern.onrender.com/create-task/${userId}`, {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json'
@@ -88,7 +88,7 @@ const Todo = () => {
     const handleDeleteTask = async (taskId) => {
         console.log("Delete task id:" + taskId + " and delete user Id is:" + User.userId);
         try {
-            const response = await fetch(`http://localhost:8000/delete-task/${User.userId}/${taskId}`, {
+            const response = await fetch(`https://backend-todo-mern.onrender.com/delete-task/${User.userId}/${taskId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
@@ -114,7 +114,7 @@ const Todo = () => {
         event.preventDefault();
         try {
             setUpdateButton(true);
-            const updateResponse = await fetch(`http://localhost:8000/update-task/${updateOwnerId}/${updateTaskId}`, {
+            const updateResponse = await fetch(`https://backend-todo-mern.onrender.com/update-task/${updateOwnerId}/${updateTaskId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
