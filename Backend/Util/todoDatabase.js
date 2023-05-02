@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const sequelize = new Sequelize('todomern', 'admin', 'kabirshaikh', { dialect: 'mysql', host: 'todo-mern.cipmk4rzmoih.us-east-1.rds.amazonaws.com' });
+const sequelize = new Sequelize(process.env.TABLENAME, process.env.USERNAME, process.env.PASSWORD, { dialect: 'mysql', host: process.env.HOST });
 
 sequelize
     .authenticate()

@@ -79,9 +79,9 @@ body {
 
 /* Media query for tablet: */
 
-@media (max-width: 820px) {
+@media ((min-width: 820px) and (max-width: 1180px)) {
     .todoContainer {
-        margin-top: 3rem;
+        margin-top: 5rem;
     }
 }
 
