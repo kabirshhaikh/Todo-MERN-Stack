@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const sequelize = new Sequelize('bfcsqqenowpthmlam2ty', 'uwwrowokua2uw6uh', 'wVocFA1R2xwM9SLlT59k', { dialect: 'mysql', host: 'bfcsqqenowpthmlam2ty-mysql.services.clever-cloud.com' });
+const sequelize = new Sequelize('todomern', 'admin', 'kabirshaikh', { dialect: 'mysql', host: 'todo-mern.cipmk4rzmoih.us-east-1.rds.amazonaws.com' });
 
 sequelize
     .authenticate()
